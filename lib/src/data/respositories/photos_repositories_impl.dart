@@ -55,18 +55,6 @@ class PhotosRepositoriesImpl implements PhotosRepositories {
   }
 
   @override
-  Future<Either<Failure, List<Photos>>> getCategoriesPhotos(
-      {CategoriesType? type, int? perPage, int? page}) async {
-    try {
-      final result = apiPhotos.getSearch(
-          perPage: perPage, page: page, query: type.toString());
-      return _getListPhotos(result);
-    } catch (e) {
-      return Left(ServerFailure(e.toString()));
-    }
-  }
-
-  @override
   Future<Either<Failure, List<Photos>>> getCategroiaPhotos(
       {CategoriesType? type, int? perPage, int? page}) async {
     try {
