@@ -22,4 +22,24 @@ class ApiPhotos {
       throw e.toString();
     }
   }
+
+  Future<List<PhotosModel>> getSearch(
+      {String? query, int? page, int? perPage}) async {
+    try {
+      var response = await http.get(
+          Uri.parse(
+              "${BASEURL_PIXSEl}search?query=$query&per_page=$perPage&page=$page"),
+          headers: {
+            "Authorization": APIKEY,
+          });
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        return PhotosModel.fromJsonList(data);
+      } else {
+        throw response.statusCode;
+      }
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }

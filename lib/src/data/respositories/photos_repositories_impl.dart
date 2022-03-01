@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:walley_app/src/core/enum/categories_type.dart';
 import 'package:walley_app/src/data/datasoureces/api_photos.dart';
 
 import '../../core/error/failures.dart';
@@ -17,22 +18,24 @@ class PhotosRepositoriesImpl implements PhotosRepositories {
   @override
   Future<Either<Failure, List<Photos>>> getCuratedPhotos(
       {int? perPage, int? page}) async {
-    if (await networkInfo.isConnected) {
-      try {
-        final result = apiPhotos.getCurated(prePage: perPage, page: page);
-        return _getListPhotos(result);
-      } catch (e) {
-        return Left(ServerFailure(e.toString()));
-      }
-    } else {
-      return Left(ServerFailure("No internet connection"));
+    try {
+      final result = apiPhotos.getCurated(prePage: perPage, page: page);
+      return _getListPhotos(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
     }
   }
 
   @override
   Future<Either<Failure, List<Photos>>> getSearchPhotos(
-      {int? perPage, int? page, String? query}) {
-    throw UnimplementedError();
+      {int? perPage, int? page, String? query}) async {
+    try {
+      final result =
+          apiPhotos.getSearch(perPage: perPage, page: page, query: query);
+      return _getListPhotos(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
   }
 
   //sqloqish
@@ -48,6 +51,30 @@ class PhotosRepositoriesImpl implements PhotosRepositories {
       }
     } else {
       return Left(ServerFailure("No internet connection"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Photos>>> getCategoriesPhotos(
+      {CategoriesType? type, int? perPage, int? page}) async {
+    try {
+      final result = apiPhotos.getSearch(
+          perPage: perPage, page: page, query: type.toString());
+      return _getListPhotos(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Photos>>> getCategroiaPhotos(
+      {CategoriesType? type, int? perPage, int? page}) async {
+    try {
+      final result = apiPhotos.getSearch(
+          perPage: perPage, page: page, query: type.toString());
+      return _getListPhotos(result);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
     }
   }
 }
